@@ -1,0 +1,9 @@
+{
+  "name": "performance",
+  "private": true,
+  "scripts": {
+    "test": "k6 run scenarios/products.scenario.js",
+    "test:products:get": "k6 run scenarios/products.get.js",
+    "test:products:create": "k6 run scenarios/products.create.js"
+  }
+}

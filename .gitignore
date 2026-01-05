@@ -1,0 +1,10 @@
+node_modules/
+**/.venv/
+dist/
+allure-results/
+allure-report/
+.env
+playwright-report/
+test-results/
+.idea/
+*.iml

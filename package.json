@@ -1,0 +1,21 @@
+{
+  "name": "automation-challenge",
+  "private": true,
+  "workspaces": [
+    "web",
+    "api",
+    "mobile",
+    "performance"
+  ],
+  "scripts": {
+    "test:web": "pnpm --filter web test",
+    "test:api": "pnpm --filter api test",
+    "test:performance": "pnpm --filter performance test",
+    "test:mobile": "cd mobile && pytest",
+    "test:all": "pnpm test:web && pnpm test:api && pnpm test:performance"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "dotenv": "^16.4.0"
+  }
+}

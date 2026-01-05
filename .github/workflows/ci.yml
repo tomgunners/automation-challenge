@@ -1,0 +1,81 @@
+name: QA Monorepo - Web | API | Performance
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # ⏰ a cada 1 hora
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: 20
+  PNPM_VERSION: 9
+
+jobs:
+  qa-tests:
+    name: QA - ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - package: web
+            path: web
+            script: test:web
+
+          - package: api
+            path: api
+            script: test:api
+
+          - package: performance
+            path: performance
+            script: test:performance
+
+    steps:
+      # ===============================
+      # 📥 Checkout
+      # ===============================
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      # ===============================
+      # 🟢 Node.js
+      # ===============================
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      # ===============================
+      # 🟣 PNPM
+      # ===============================
+      - name: 🟣 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      # ===============================
+      # 📦 Cache Inteligente por Workspace
+      # ===============================
+      - name: 📦 Install dependencies (workspace-aware)
+        run: |
+          pnpm install --frozen-lockfile --filter ./${{ matrix.path }}...
+
+      # ===============================
+      # 🧪 Executa Testes
+      # ===============================
+      - name: 🧪 Run tests - ${{ matrix.package }}
+        run: |
+          pnpm --filter ./${{ matrix.path }} run ${{ matrix.script }}
+
+      # ===============================
+      # 📊 Upload Artifacts
+      # ===============================
+      - name: 📊 Upload Results - ${{ matrix.package }}
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-${{ matrix.package }}-${{ github.run_id }}
+          path: |
+            ${{ matrix.path }}/results/**
