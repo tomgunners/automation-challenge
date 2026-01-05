@@ -1,8 +1,17 @@
 name: QA Monorepo - Web | API | Performance
 
 on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
   schedule:
     - cron: '0 * * * *'   # ⏰ a cada 1 hora
+
   workflow_dispatch:
 
 env:
