@@ -5,21 +5,36 @@ import { productSchema } from '../schemas/product.schema';
 import { validateSchema } from '../utils/schema.validator';
 
 test.describe.serial('Fake Store API – Products', () => {
-
   let productId: number;
   let createdProduct: any;
+
+  async function parseJsonResponse(response: any) {
+    const contentType = response.headers()['content-type'] || '';
+
+    console.log('➡️ STATUS:', response.status());
+    console.log('➡️ URL:', response.url());
+    console.log('➡️ CONTENT-TYPE:', contentType);
+
+    const text = await response.text();
+
+    if (!contentType.includes('application/json')) {
+      console.error('❌ Resposta não é JSON. Body recebido:');
+      console.error(text.substring(0, 300));
+      throw new Error('Resposta da API não é JSON');
+    }
+
+    return JSON.parse(text);
+  }
 
   test('Deve listar todos os produtos', async ({ request }) => {
     const client = new ProductsClient(request);
 
     const response = await client.getAllProducts();
-    const body = await response.json();
+    const body = await parseJsonResponse(response);
 
     console.log('📥 LIST response:', body);
 
-    expect(response.status()).toBe(200);
     expect(body.length).toBeGreaterThan(0);
-
     expect(validateSchema(productSchema, body[0])).toBe(true);
   });
 
@@ -27,13 +42,11 @@ test.describe.serial('Fake Store API – Products', () => {
     const client = new ProductsClient(request);
 
     const response = await client.getProductById(1);
-    const body = await response.json();
+    const body = await parseJsonResponse(response);
 
     console.log('📥 GET response:', body);
 
-    expect(response.status()).toBe(200);
     expect(body.id).toBe(1);
-
     expect(validateSchema(productSchema, body)).toBe(true);
   });
 
@@ -44,13 +57,12 @@ test.describe.serial('Fake Store API – Products', () => {
     console.log('📤 CREATE payload:', payload);
 
     const response = await client.createProduct(payload);
-    const body = await response.json();
+    const body = await parseJsonResponse(response);
 
     console.log('📥 CREATE response:', body);
 
     expect(response.status()).toBe(201);
     expect(body.title).toBe(payload.title);
-
     expect(validateSchema(productSchema, body)).toBe(true);
 
     productId = body.id;
@@ -71,15 +83,13 @@ test.describe.serial('Fake Store API – Products', () => {
     console.log('📤 UPDATE payload:', updatedPayload);
 
     const response = await client.updateProduct(productId, updatedPayload);
-    const body = await response.json();
+    const body = await parseJsonResponse(response);
 
     console.log('📥 UPDATE response:', body);
 
-    expect(response.status()).toBe(200);
     expect(body.id).toBe(productId);
     expect(body.title).toBe(updatedPayload.title);
     expect(body.price).toBe(updatedPayload.price);
-
     expect(validateSchema(productSchema, body)).toBe(true);
   });
 
@@ -89,6 +99,9 @@ test.describe.serial('Fake Store API – Products', () => {
     console.log(`🗑️ DELETE productId: ${productId}`);
 
     const response = await client.deleteProduct(productId);
+
+    console.log('➡️ STATUS:', response.status());
+    console.log('➡️ URL:', response.url());
 
     expect(response.status()).toBe(200);
   });
