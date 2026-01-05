@@ -96,7 +96,7 @@ jobs:
       # 🧪 Run tests - WEB / API
       # ===============================
       - name: 🧪 Run tests - ${{ matrix.package }}
-        if: matrix.package != 'performance'
+        if: matrix.package == 'web' || matrix.package == 'api'
         env:
           ENV: ci
         run: |
