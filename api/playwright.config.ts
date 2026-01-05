@@ -10,9 +10,8 @@ export default defineConfig({
   globalSetup: require.resolve('./global-setup'),
 
   use: {
- //   baseURL: env.api.baseUrl,
-    baseURL: 'https://fakestoreapi.com',
- //   timeout: env.api.timeout,
+    baseURL: env.api.baseUrl,
+    timeout: env.api.timeout,
 
     extraHTTPHeaders: {
       'Content-Type': 'application/json',

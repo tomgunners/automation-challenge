@@ -13,6 +13,9 @@ export type Environment = {
 };
 
 export const environments: Record<string, Environment> = {
+  /**
+   * 🧑‍💻 Ambiente Local (dev machine)
+   */
   local: {
     web: {
       baseUrl: 'https://www.saucedemo.com',
@@ -23,13 +26,17 @@ export const environments: Record<string, Environment> = {
     },
   },
 
-  hml: {
+  /**
+   * 🤖 Ambiente de CI/CD (GitHub Actions, pipelines)
+   * Deve ser EXPLÍCITO para evitar fallback errado
+   */
+  ci: {
     web: {
-      baseUrl: 'https://hml.saucedemo.com',
+      baseUrl: 'https://www.saucedemo.com',
     },
     api: {
       baseUrl: 'https://fakestoreapi.com',
-      timeout: 7000,
+      timeout: 8000,
     },
   },
 };

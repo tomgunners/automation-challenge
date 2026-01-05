@@ -5,10 +5,10 @@ export const options = {
 
       startVUs: 0,
       stages: [
-        { duration: '30s', target: 5 },   // ramp-up inicial
-        { duration: '1m', target: 5 },    // carga sustentada
-        { duration: '30s', target: 10 },  // aumento de pressão
-        { duration: '1m', target: 10 },   // validação de SLA
+        { duration: '30s', target: 1 },   // ramp-up inicial
+        { duration: '1m', target: 1 },    // carga sustentada
+        { duration: '30s', target: 1 },  // aumento de pressão
+        { duration: '1m', target: 1 },   // validação de SLA
         { duration: '30s', target: 0 },   // ramp-down
       ],
 

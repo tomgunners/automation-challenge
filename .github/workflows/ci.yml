@@ -17,10 +17,11 @@ on:
 env:
   NODE_VERSION: 20
   PNPM_VERSION: 9
-
+  ENV: ci
+  
 jobs:
   qa-tests:
-    name: QA - ${{ matrix.package }}
+    name: Automação - ${{ matrix.package }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
