@@ -1,75 +1,27 @@
-name: QA Monorepo - API Only
+name: Automação - API
 
 on:
   push:
     branches:
       - main
-
   pull_request:
-    branches:
-      - main
-
-  schedule:
-    - cron: '0 * * * *'   # ⏰ a cada 1 hora
-
-  workflow_dispatch:
-
-env:
-  NODE_VERSION: 20
-  PNPM_VERSION: 9
-  ENV: ci
 
 jobs:
-  qa-api:
-    name: Automação - API
+  api-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
 
     steps:
-      # ===============================
-      # 📥 Checkout
-      # ===============================
-      - name: 📥 Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      # ===============================
-      # 🟣 Setup PNPM
-      # ===============================
-      - name: 🟣 Setup PNPM
-        uses: pnpm/action-setup@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          version: ${{ env.PNPM_VERSION }}
+          node-version: '18'
 
-      # ===============================
-      # 🟢 Setup Node.js
-      # ===============================
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
 
-      # ===============================
-      # 📦 Install dependencies (API only)
-      # ===============================
-      - name: 📦 Install dependencies
-        run: |
-          pnpm install --frozen-lockfile --filter ./api...
-
-      # ===============================
-      # 🧪 Run API tests
-      # ===============================
-      - name: 🧪 Run API tests
-        run: |
-          pnpm --filter ./api run test
-
-      # ===============================
-      # 📊 Upload Artifacts
-      # ===============================
-      - name: 📊 Upload Results - API
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: results-api-${{ github.run_id }}
-          path: |
-            api/results/**
+      - name: Run API tests
+        run: pnpm --filter ./api run test
+        env:
+          API_BASE_URL: https://fakestoreapi.com
