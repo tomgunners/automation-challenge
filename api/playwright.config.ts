@@ -3,6 +3,12 @@ import { getEnv } from '../shared/utils/getEnv';
 
 const env = getEnv();
 
+// 🔎 LOGS DE DIAGNÓSTICO (executam no CI)
+console.log('🔧 Playwright API Config');
+console.log('ENV:', process.env.ENV);
+console.log('API Base URL:', env.api.baseUrl);
+console.log('API Timeout:', env.api.timeout);
+
 export default defineConfig({
   testDir: './tests',
 
@@ -17,7 +23,7 @@ export default defineConfig({
     extraHTTPHeaders: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'User-Agent': 'Playwright-API-Tests'
+      'User-Agent': 'Playwright-API-Tests',
     },
 
     trace: 'on-first-retry',
@@ -25,15 +31,20 @@ export default defineConfig({
 
   reporter: [
     ['list'],
-    ['html', {
-      outputFolder: 'playwright-report',
-      open: 'never',
-    }],
-
-    ['allure-playwright', {
-      outputFolder: 'allure-results',
-      detail: true,
-      suiteTitle: false,
-    }],
+    [
+      'html',
+      {
+        outputFolder: 'playwright-report',
+        open: 'never',
+      },
+    ],
+    [
+      'allure-playwright',
+      {
+        outputFolder: 'allure-results',
+        detail: true,
+        suiteTitle: false,
+      },
+    ],
   ],
 });
