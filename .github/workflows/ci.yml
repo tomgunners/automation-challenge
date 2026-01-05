@@ -88,7 +88,7 @@ jobs:
       # 🌐 Install Playwright Browsers (web & api)
       # ===============================
       - name: 🌐 Install Playwright Browsers
-        if: matrix.package != 'performance'
+        if: matrix.package == 'web'
         run: |
           pnpm --filter ./${{ matrix.path }} exec playwright install --with-deps
 
