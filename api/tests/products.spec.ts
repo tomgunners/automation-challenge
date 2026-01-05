@@ -30,13 +30,19 @@ test.describe.serial('Fake Store API – Products', () => {
     const client = new ProductsClient(request);
 
     const response = await client.getAllProducts();
-    const body = await parseJsonResponse(response);
+    const body = await response.json();
 
     console.log('📥 LIST response:', body);
 
-    expect(body.length).toBeGreaterThan(0);
-    expect(validateSchema(productSchema, body[0])).toBe(true);
+    const products = Array.isArray(body)
+      ? body
+      : body.products;
+
+    expect(products).toBeDefined();
+    expect(products.length).toBeGreaterThan(0);
+    expect(validateSchema(productSchema, products[0])).toBe(true);
   });
+
 
   test('Deve buscar um produto por ID', async ({ request }) => {
     const client = new ProductsClient(request);
