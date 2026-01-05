@@ -12,6 +12,7 @@ export default defineConfig({
   use: {
     baseURL: env.api.baseUrl,
     timeout: env.api.timeout,
+    headless: true,
 
     extraHTTPHeaders: {
       'Content-Type': 'application/json',

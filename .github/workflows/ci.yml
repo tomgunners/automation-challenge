@@ -105,7 +105,7 @@ jobs:
       # ===============================
       # 🧪 Run tests - PERFORMANCE
       # ===============================
-      - name: 🧪 Run tests - performance
+      - name: 🧪 Run tests - ${{ matrix.package }}
         if: matrix.package == 'performance'
         run: |
           pnpm --filter ./${{ matrix.path }} run ${{ matrix.script }}
