@@ -35,7 +35,7 @@ export const environments: Record<string, Environment> = {
       baseUrl: 'https://www.saucedemo.com',
     },
     api: {
-      baseUrl: 'https://fakestoreapi.com',
+      baseUrl: 'https://dummyjson.com',
       timeout: 8000,
     },
   },
