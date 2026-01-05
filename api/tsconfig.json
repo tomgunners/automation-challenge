@@ -3,6 +3,7 @@
     "module": "ESNext",        // gerar import/export
     "target": "ES2020",
     "moduleResolution": "Node",
+    "types": ["node"],
     "esModuleInterop": true,
     "outDir": "dist",
     "allowJs": true
