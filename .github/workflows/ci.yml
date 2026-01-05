@@ -17,8 +17,7 @@ on:
 env:
   NODE_VERSION: 20
   PNPM_VERSION: 9
-  ENV: ci
-  
+
 jobs:
   qa-tests:
     name: Automação - ${{ matrix.package }}
@@ -89,14 +88,25 @@ jobs:
       # 🌐 Install Playwright Browsers (web & api)
       # ===============================
       - name: 🌐 Install Playwright Browsers
-        if: matrix.package == 'web'
+        if: matrix.package != 'performance'
         run: |
           pnpm --filter ./${{ matrix.path }} exec playwright install --with-deps
 
       # ===============================
-      # 🧪 Run tests
+      # 🧪 Run tests - WEB / API
       # ===============================
       - name: 🧪 Run tests - ${{ matrix.package }}
+        if: matrix.package != 'performance'
+        env:
+          ENV: ci
+        run: |
+          pnpm --filter ./${{ matrix.path }} run ${{ matrix.script }}
+
+      # ===============================
+      # 🧪 Run tests - PERFORMANCE
+      # ===============================
+      - name: 🧪 Run tests - performance
+        if: matrix.package == 'performance'
         run: |
           pnpm --filter ./${{ matrix.path }} run ${{ matrix.script }}
 
