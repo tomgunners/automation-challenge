@@ -1,7 +1,7 @@
 import { APIRequestContext } from '@playwright/test';
 
 export class ProductsClient {
-  constructor(private request: APIRequestContext) { }
+  constructor(private request: APIRequestContext) {}
 
   async getAllProducts() {
     return this.request.get('/products');
@@ -12,12 +12,9 @@ export class ProductsClient {
   }
 
   async createProduct(payload: any) {
-    const response = await this.request.post('/products', {
-      data: payload
+    return this.request.post('/products/add', {
+      data: payload,
     });
-
-    const body = await response.json();
-    return response;
   }
 
   async updateProduct(id: number, payload: any) {

@@ -18,12 +18,13 @@ export default defineConfig({
   use: {
     baseURL: env.api.baseUrl,
     timeout: env.api.timeout,
-    headless: true,
 
     extraHTTPHeaders: {
       'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0',
     },
-
     trace: 'on-first-retry',
   },
 
