@@ -48,15 +48,6 @@ jobs:
         uses: actions/checkout@v4
 
       # ===============================
-      # 🟢 Node.js
-      # ===============================
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-
-      # ===============================
       # 🟣 PNPM
       # ===============================
       - name: 🟣 Setup PNPM
@@ -64,6 +55,14 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
 
+      # ===============================
+      # 🟢 Node.js
+      # ===============================
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
       # ===============================
       # 📦 Cache Inteligente por Workspace
       # ===============================
