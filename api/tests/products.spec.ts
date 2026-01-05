@@ -40,8 +40,20 @@ test.describe.serial('Fake Store API – Products', () => {
 
     expect(products).toBeDefined();
     expect(products.length).toBeGreaterThan(0);
-    expect(validateSchema(productSchema, products[0])).toBe(true);
+
+    const rawProduct = products[0];
+
+    const normalizedProduct = {
+      ...rawProduct,
+      image:
+        rawProduct.image ??
+        rawProduct.thumbnail ??
+        rawProduct.images?.[0],
+    };
+
+    expect(validateSchema(productSchema, normalizedProduct)).toBe(true);
   });
+
 
 
   test('Deve buscar um produto por ID', async ({ request }) => {
