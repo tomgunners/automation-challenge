@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "Node",
+    "module": "ESNext",        // gerar import/export
     "target": "ES2020",
-    "esModuleInterop": true
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "allowJs": true
   }
 }

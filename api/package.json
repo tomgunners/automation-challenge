@@ -11,6 +11,7 @@
     "allure-playwright": "^2.15.1"
   },
   "dependencies": {
-    "@faker-js/faker": "^10.1.0"
+    "@faker-js/faker": "^10.1.0",
+    "type": "module"
   }
 }
