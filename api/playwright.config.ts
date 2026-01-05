@@ -14,6 +14,7 @@ export default defineConfig({
     timeout: env.api.timeout,
 
     extraHTTPHeaders: {
+      'Content-Type': 'application/json',
       'Accept': 'application/json',
       'User-Agent': 'Playwright-API-Tests'
     },

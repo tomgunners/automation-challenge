@@ -1,11 +1,11 @@
 import list from '../scripts/products.list.k6.js';
 import get from '../scripts/products.get.k6.js';
 import create from '../scripts/products.create.k6.js';
-import { options } from '../config/k6.config.js';
+//import { options } from '../config/k6.config.js';
 import { htmlReport } from 'https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js';
 
 // Exporta opções
-export { options };
+//export { options };
 
 // Cenário principal
 export default function () {
