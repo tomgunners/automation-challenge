@@ -30,15 +30,15 @@ jobs:
         include:
           - package: web
             path: web
-            script: test:web
+            script: test
 
           - package: api
             path: api
-            script: test:api
+            script: test
 
           - package: performance
             path: performance
-            script: test:performance
+            script: test
 
     steps:
       # ===============================
