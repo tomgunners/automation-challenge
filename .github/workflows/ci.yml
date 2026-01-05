@@ -1,26 +1,75 @@
-name: API Tests
+name: QA Monorepo - API Only
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  schedule:
+    - cron: '0 * * * *'   # ⏰ a cada 1 hora
+
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: 20
+  PNPM_VERSION: 9
+  ENV: ci
 
 jobs:
-  api-tests:
+  qa-api:
+    name: Automação - API
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v3
+      # ===============================
+      # 📥 Checkout
+      # ===============================
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      # ===============================
+      # 🟣 Setup PNPM
+      # ===============================
+      - name: 🟣 Setup PNPM
+        uses: pnpm/action-setup@v4
         with:
-          node-version: '18'
+          version: ${{ env.PNPM_VERSION }}
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      # ===============================
+      # 🟢 Setup Node.js
+      # ===============================
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install
+      # ===============================
+      # 📦 Install dependencies (API only)
+      # ===============================
+      - name: 📦 Install dependencies
+        run: |
+          pnpm install --frozen-lockfile --filter ./api...
 
-      - name: Run API tests
-        run: pnpm --filter ./api run test
-        env:
-          API_BASE_URL: https://fakestoreapi.com
+      # ===============================
+      # 🧪 Run API tests
+      # ===============================
+      - name: 🧪 Run API tests
+        run: |
+          pnpm --filter ./api run test
+
+      # ===============================
+      # 📊 Upload Artifacts
+      # ===============================
+      - name: 📊 Upload Results - API
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-api-${{ github.run_id }}
+          path: |
+            api/results/**

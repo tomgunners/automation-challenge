@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-export const buildProductPayload = () => {
+export function buildProductPayload() {
   return {
     title: faker.commerce.productName(),
     price: Number(faker.commerce.price()),
@@ -8,4 +8,4 @@ export const buildProductPayload = () => {
     image: faker.image.url(),
     category: faker.commerce.department(),
   };
-};
+}
