@@ -10,7 +10,8 @@ export default defineConfig({
 
   use: {
     viewport: { width: 1280, height: 720 },
-    baseURL: env.web.baseUrl,
+    //baseURL: env.web.baseUrl,
+    baseURL: 'https://www.saucedemo.com',
     headless: true,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
