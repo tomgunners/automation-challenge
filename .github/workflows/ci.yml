@@ -1,4 +1,4 @@
-name: QA Monorepo - API Only
+name: QA Monorepo - Web | API | Performance
 
 on:
   push:
@@ -17,13 +17,28 @@ on:
 env:
   NODE_VERSION: 20
   PNPM_VERSION: 9
-  ENV: ci
 
 jobs:
-  qa-api:
-    name: Automação - API
+  qa-tests:
+    name: Automação - ${{ matrix.package }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - package: web
+            path: web
+            script: test
+
+          - package: api
+            path: api
+            script: test
+
+          - package: performance
+            path: performance
+            script: test
 
     steps:
       # ===============================
@@ -50,26 +65,58 @@ jobs:
           cache: 'pnpm'
 
       # ===============================
-      # 📦 Install dependencies (API only)
+      # ⚡ Install k6 (only performance)
+      # ===============================
+      - name: ⚡ Install k6
+        if: matrix.package == 'performance'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnupg ca-certificates
+          curl -fsSL https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install -y k6
+
+      # ===============================
+      # 📦 Install dependencies (workspace-aware)
       # ===============================
       - name: 📦 Install dependencies
         run: |
-          pnpm install --frozen-lockfile --filter ./api...
+          pnpm install --frozen-lockfile --filter ./${{ matrix.path }}...
 
       # ===============================
-      # 🧪 Run API tests
+      # 🌐 Install Playwright Browsers (web & api)
       # ===============================
-      - name: 🧪 Run API tests
+      - name: 🌐 Install Playwright Browsers
+        if: matrix.package == 'web'
         run: |
-          pnpm --filter ./api run test
+          pnpm --filter ./${{ matrix.path }} exec playwright install --with-deps
 
+      # ===============================
+      # 🧪 Run tests - WEB / API
+      # ===============================
+      - name: 🧪 Run tests - ${{ matrix.package }}
+        if: matrix.package != 'performance'
+        env:
+          ENV: ci
+        run: |
+          pnpm --filter ./${{ matrix.path }} run ${{ matrix.script }}
+
+      # ===============================
+      # 🧪 Run tests - PERFORMANCE
+      # ===============================
+      - name: 🧪 Run tests - performance
+        if: matrix.package == 'performance'
+        run: |
+          pnpm --filter ./${{ matrix.path }} run ${{ matrix.script }}
+        continue-on-error: true
       # ===============================
       # 📊 Upload Artifacts
       # ===============================
-      - name: 📊 Upload Results - API
+      - name: 📊 Upload Results - ${{ matrix.package }}
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: results-api-${{ github.run_id }}
+          name: results-${{ matrix.package }}-${{ github.run_id }}
           path: |
-            api/results/**
+            ${{ matrix.path }}/results/**
