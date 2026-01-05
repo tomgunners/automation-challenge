@@ -1,6 +1,10 @@
+// Antes
+// const faker = require('@faker-js/faker');
+
+// Agora
 import { faker } from '@faker-js/faker';
 
-export function buildProductPayload() {
+export const buildProductPayload = () => {
   return {
     title: faker.commerce.productName(),
     price: Number(faker.commerce.price()),
@@ -8,4 +12,4 @@ export function buildProductPayload() {
     image: faker.image.url(),
     category: faker.commerce.department(),
   };
-}
+};
