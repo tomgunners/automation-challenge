@@ -1,10 +1,6 @@
-name: Automação - API
+name: API Tests
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   api-tests:
@@ -17,6 +13,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       - name: Install dependencies
         run: pnpm install
