@@ -1,3 +1,10 @@
+![CI](https://github.com/tomgunners/automation-challenge/actions/workflows/qa-monorepo.yml/badge.svg)
+![Playwright](https://img.shields.io/badge/Playwright-E2E%20%7C%20API-green?logo=playwright)
+![Allure](https://img.shields.io/badge/Allure-Reports-orange)
+![k6](https://img.shields.io/badge/k6-Performance-blueviolet?logo=k6)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue?logo=typescript)
+![pnpm](https://img.shields.io/badge/pnpm-workspaces-yellow?logo=pnpm)
+
 # 🧪 QA Automation Monorepo
 
 Este repositório é um **monorepo de qualidade de software** projetado para centralizar **testes Web, API, Mobile e Performance**, seguindo boas práticas.
