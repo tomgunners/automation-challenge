@@ -1,4 +1,4 @@
-![CI](https://github.com/tomgunners/automation-challenge/actions/workflows/qa-monorepo.yml/badge.svg)
+![CI](https://github.com/tomgunners/automation-challenge/actions/workflows/ci.yml/badge.svg)
 ![Playwright](https://img.shields.io/badge/Playwright-E2E%20%7C%20API-green?logo=playwright)
 ![Allure](https://img.shields.io/badge/Allure-Reports-orange)
 ![k6](https://img.shields.io/badge/k6-Performance-blueviolet?logo=k6)
