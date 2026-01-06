@@ -96,7 +96,7 @@ jobs:
       # 🧪 Run tests - WEB / API
       # ===============================
       - name: 🧪 Run tests - ${{ matrix.package }}
-        if: matrix.package == 'web' || matrix.package == 'api'
+        if: matrix.package != 'performance'
         env:
           ENV: ci
         run: |
@@ -119,4 +119,7 @@ jobs:
         with:
           name: results-${{ matrix.package }}-${{ github.run_id }}
           path: |
+            ${{ matrix.path }}/playwright-report/**
+            ${{ matrix.path }}/allure-results/**
             ${{ matrix.path }}/results/**
+          if-no-files-found: warn
