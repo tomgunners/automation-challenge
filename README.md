@@ -237,15 +237,6 @@ Esses artifacts podem ser usados para:
 
 ---
 
-## 🚀 Próximos Passos (Evolução)
-
-* 📈 Comparação automática entre execuções
-* 📢 Alertas (Slack / Teams)
-* 🌍 Ambientes (dev / staging / prod)
-* 📊 Publicação automática de relatórios HTML
-
----
-
 ## 👨‍💻 Autor
 
 Wellington de Oliveira - QA SÊNIOR
