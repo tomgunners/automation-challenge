@@ -1,29 +1,22 @@
 name: QA Monorepo - Web | API | Performance
-
 on:
   push:
     branches:
       - main
-
   pull_request:
     branches:
       - main
-
   schedule:
-    - cron: '0 * * * *'   # ⏰ a cada 1 hora
-
+    - cron: '0 2 * * *'   # 🌙 Nightly às 02:00 UTC (todo dia)
   workflow_dispatch:
-
 env:
   NODE_VERSION: 20
   PNPM_VERSION: 9
-
 jobs:
   qa-tests:
     name: Automação - ${{ matrix.package }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
     strategy:
       fail-fast: false
       matrix:
@@ -31,22 +24,18 @@ jobs:
           - package: web
             path: web
             script: test
-
           - package: api
             path: api
             script: test
-
           - package: performance
             path: performance
             script: test
-
     steps:
       # ===============================
       # 📥 Checkout
       # ===============================
       - name: 📥 Checkout
         uses: actions/checkout@v4
-
       # ===============================
       # 🟣 Setup PNPM
       # ===============================
@@ -54,7 +43,6 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
-
       # ===============================
       # 🟢 Setup Node.js
       # ===============================
@@ -63,7 +51,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
-
       # ===============================
       # ⚡ Install k6 (only performance)
       # ===============================
@@ -76,14 +63,12 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
           sudo apt-get update
           sudo apt-get install -y k6
-
       # ===============================
       # 📦 Install dependencies (workspace-aware)
       # ===============================
       - name: 📦 Install dependencies
         run: |
           pnpm install --frozen-lockfile --filter ./${{ matrix.path }}...
-
       # ===============================
       # 🌐 Install Playwright Browsers (web & api)
       # ===============================
@@ -91,7 +76,6 @@ jobs:
         if: matrix.package == 'web'
         run: |
           pnpm --filter ./${{ matrix.path }} exec playwright install --with-deps
-
       # ===============================
       # 🧪 Run tests - WEB / API
       # ===============================
@@ -101,7 +85,6 @@ jobs:
           ENV: ci
         run: |
           pnpm --filter ./${{ matrix.path }} run ${{ matrix.script }}
-
       # ===============================
       # 🧪 Run tests - PERFORMANCE
       # ===============================
